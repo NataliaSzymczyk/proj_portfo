@@ -21,6 +21,30 @@ class AddDonation(View):
         return render(request, 'form.html')
 
 
+class UserProfile(LoginRequiredMixin, View):
+    def get(self, request):
+        return render(request, 'user-profile.html')
+
+
+class EditUser(LoginRequiredMixin, View):
+    def get(self, request):
+        return render(request, 'user-edit.html')
+    def post(self, request):
+        name = request.POST['name']
+        surname = request.POST['surname']
+        email = request.POST['email']
+        password = request.POST['password']
+        password2 = request.POST['password2']
+        current_user = self.request.user
+        current_user.name = name
+        current_user.surname = surname
+        current_user.email = email
+        if password == password2:
+            current_user.password = password
+        current_user.save()
+        return redirect('user-profile')
+
+
 class LoginView(View):
     def get(self, request):
         return render(request, 'login.html')

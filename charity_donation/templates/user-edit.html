@@ -9,7 +9,7 @@
             Witaj {{ request.user }}
             <ul class="dropdown">
               <li><a href="{% url 'user-profile' %}">Profil</a></li>
-              <li><a href="{% url 'user-edit' %}">Ustawienia</a></li>
+              <li><a href="#">Ustawienia</a></li>
               <li><a href="{% url 'logout' %}">Wyloguj</a></li>
             </ul>
           </li>
@@ -30,13 +30,37 @@
         </ul>
       </nav>
 
-      <div class="slogan container container--90">
-          <h2>
-            Dziękujemy za przesłanie formularza Na maila prześlemy wszelkie
-            informacje o odbiorze.
-          </h2>
-      </div>
+
+    <section class="login-page">
+      <h2>Edytuj</h2>
+      <form action="" method="post">
+          {% csrf_token %}
+        <div class="form-group">
+          <input type="text" name="name" placeholder="{{ user.first_name }}" />
+        </div>
+         <div class="form-group">
+          <input type="text" name="surname" placeholder="{{ user.surname }}" />
+        </div>
+        <div class="form-group">
+          <input type="email" name="email" placeholder="{{ user.email }}" />
+        </div>
+        <div class="form-group">
+          <input type="password" name="password" placeholder="Hasło" />
+        </div>
+        <div class="form-group">
+          <input type="password" name="password2" placeholder="Powtórz hasło" />
+            <br><br><br>
+            <button class="btn" type="submit">Potwierdź zmiany</button>
+        </div>
+          </form>
+    </section>
+
     </header>
+
+
+
+
+
 
 
   {% endblock %}

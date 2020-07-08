@@ -29,14 +29,25 @@
           <li><a href="{% url 'index' %}#contact" class="btn btn--without-border">Kontakt</a></li>
         </ul>
       </nav>
+<div class="slogan container container--90">
+        <div class="slogan--item">
+   <h1>Twój profil</h1>
 
-      <div class="slogan container container--90">
-          <h2>
-            Dziękujemy za przesłanie formularza Na maila prześlemy wszelkie
-            informacje o odbiorze.
-          </h2>
+<div class="about-us--text">
+    <p>Imię: {{user.first_name}}</p>
+    <p>Nazwisko: {{user.last_name}}</p>
+    <p>E-mail: {{user.email}}</p>
+{#    <p><a href="{% url 'profile_donation' %}">Lista moich darów</a></p>#}
+
+    </div>
+          </div>
+        </div>
       </div>
     </header>
+
+
+
+
 
 
   {% endblock %}
