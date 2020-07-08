@@ -55,7 +55,7 @@ class LoginView(View):
         if user is not None:
             login(request, user)
             # return redirect('add-donation')
-            return redirect(reverse('index')) #reverse?
+            return redirect('user-profile') #reverse?
         else:
             return redirect(reverse('register'))
 
