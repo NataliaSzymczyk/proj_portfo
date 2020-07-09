@@ -13,7 +13,12 @@ from django.db.models import Sum, Count
 
 class LandingPage(View):
     def get(self, request):
-        return render(request, 'index.html')
+        foundations = Institution.objects.filter(type='Fundacja')
+        organizations = Institution.objects.filter(type='Organizacja_pozarządowa')
+        collections= Institution.objects.filter(type='Zbiórka_lokalna')
+        return render(request, 'index.html', {"foundations":foundations,
+                                              "organizations":organizations,
+                                              "collections":collections})
 
 
 class AddDonation(View):

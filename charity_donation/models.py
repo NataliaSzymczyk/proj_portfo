@@ -17,7 +17,10 @@ class Institution(models.Model):
     name = models. CharField(max_length=128)
     description = models.TextField()
     type = models.CharField(max_length=64, choices=TYPES, default='Fundacja')
-    categories = models.ManyToManyField(Category)
+    categories = models.ManyToManyField(Category, related_name="categories_institution")
+
+    def __str__(self):
+        return self.name
 
 
 class Donation(models.Model):
@@ -32,5 +35,7 @@ class Donation(models.Model):
     pick_up_time = models.TimeField()
     pick_up_comment = models.TextField()
     user = models.ForeignKey(User, null=True, default=None, on_delete=models.CASCADE)
+    # def __str__(self):
+    #     return self.name
 
 
