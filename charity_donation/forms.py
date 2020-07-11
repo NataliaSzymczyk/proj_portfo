@@ -3,17 +3,10 @@ from .models import *
 from .views import *
 from django.contrib.auth.models import User
 
-#
-# class BudgetForm(forms.ModelForm):
-#     class Meta:
-#         model = Budget
-#         fields = '__all__'
-#     def __init__(self, *args, **kwargs):
-#         super(BudgetForm, self).__init__(*args, **kwargs)
-#         self.fields['description'].required = False
 
 
-class EditUserForm(forms.ModelForm):
-    class Meta:
-        model = User
-        fields = ['password']
+class EditPassword(forms.Form):
+    old_password1 = forms.CharField(max_length=64, widget=forms.PasswordInput)
+    password1 = forms.CharField(max_length=64, widget=forms.PasswordInput)
+    password2 = forms.CharField(max_length=64, widget=forms.PasswordInput)
+
