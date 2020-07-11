@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
@@ -13,12 +15,24 @@ from django.db.models import Sum, Count
 
 class LandingPage(View):
     def get(self, request):
+        all_donations = Donation.objects.aggregate(Sum('quantity'))
+        supperted_foundations = Donation.objects.annotate(total=Count('institution', distinct=True))
+        list_of = []
+        for element in supperted_foundations:
+            list_of.append(element.institution.name)
+        set_of = set(list_of)
+        # supported_institution=supperted_foundations[0].total # działa, ale nie to
+        # supperted_foundations_set = set(supperted_foundations) #nie ma sensu, bo..
+        supported_institution = len(set_of)
+
         foundations = Institution.objects.filter(type='Fundacja')
         organizations = Institution.objects.filter(type='Organizacja_pozarządowa')
         collections= Institution.objects.filter(type='Zbiórka_lokalna')
         return render(request, 'index.html', {"foundations":foundations,
                                               "organizations":organizations,
-                                              "collections":collections})
+                                              "collections":collections,
+                                              "all_donations":all_donations,
+                                              "supported_institution":supported_institution,})
 
 
 class AddDonation(View):
@@ -30,6 +44,15 @@ class AddDonation(View):
 class UserProfile(LoginRequiredMixin, View):
     def get(self, request):
         return render(request, 'user-profile.html')
+
+
+class UserDonations(LoginRequiredMixin, View):
+    def get(self, request):
+        donated_by_me = Donation.objects.filter(user=self.request.user).order_by('pick_up_date')
+        dzis = date.today()
+        donated_by_me_with_time = Donation.objects.filter(user=self.request.user).filter(pick_up_date__gt=dzis).order_by('pick_up_date')
+        return render(request, 'user-donations.html', {"donated_by_me":donated_by_me, 'dzis':dzis,
+                                                       "donated_by_me_with_time":donated_by_me_with_time})
 
 
 class EditUser(LoginRequiredMixin, View):
@@ -59,6 +82,7 @@ class EditUser(LoginRequiredMixin, View):
 
 
 class UserPassword(LoginRequiredMixin, View):
+    # !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
     def get(self, request):
         form = EditPassword()
         return render(request, 'user-edit-pass.html', {"form":form})

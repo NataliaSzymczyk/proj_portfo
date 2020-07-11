@@ -2,34 +2,9 @@
 {% load static %}
 {% block content %}
     <header class="header--form-page">
-      <nav class="container container--70">
-        {% if user.is_authenticated %}
-          <ul class="nav--actions">
-          <li class="logged-user">
-            Witaj {{ request.user }}
-            <ul class="dropdown">
-              <li><a href="{% url 'user-profile' %}">Profil</a></li>
-              <li><a href="{% url 'user-edit' %}">Ustawienia</a></li>
-              <li><a href="{% url 'logout' %}">Wyloguj</a></li>
-            </ul>
-          </li>
-        </ul>
-          {% else %}
-                  <ul class="nav--actions">
-          <li><a href="{% url 'login' %}" class="btn btn--small btn--without-border">Zaloguj</a></li>
-          <li><a href="{% url 'register' %}" class="btn btn--small btn--highlighted">Załóż konto</a></li>
-        </ul>
-          {% endif %}
 
-        <ul>
-          <li><a href="{% url 'index' %}" class="btn btn--without-border active">Start</a></li>
-          <li><a href="{% url 'index' %}#steps" class="btn btn--without-border">O co chodzi?</a></li>
-          <li><a href="{% url 'index' %}#about-us" class="btn btn--without-border">O nas</a></li>
-          <li><a href="{% url 'index' %}#help" class="btn btn--without-border">Fundacje i organizacje</a></li>
-          <li><a href="{% url 'add-donation' %}" class="btn btn--without-border">Przekaż dary</a></li>
-          <li><a href="{% url 'index' %}#contact" class="btn btn--without-border">Kontakt</a></li>
-        </ul>
-      </nav>
+          {% include 'nav.html' %}
+
 <div class="slogan container container--90">
         <div class="slogan--item">
    <h1>Twój profil</h1>
@@ -38,7 +13,10 @@
     <p>Imię: {{user.first_name}}</p>
     <p>Nazwisko: {{user.last_name}}</p>
     <p>E-mail: {{user.email}}</p>
-{#    <p><a href="{% url 'profile_donation' %}">Lista moich darów</a></p>#}
+    <br>
+       <div class="form-group form-group--buttons" style="text-align: right">
+          <a href="{% url 'user-donations' %}" class="btn btn--highlighted">Przejdź do Twoich dotychczasowych dotacji</a>
+            </div>
 
     </div>
           </div>

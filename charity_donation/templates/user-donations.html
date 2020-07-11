@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <header class="header--form-page">
+
+          {% include 'nav.html' %}
+
+<div class="slogan container container--90">
+        <div class="slogan--item">
+<div class="about-us--text">
+    {% for elem in donated_by_me %}
+
+    <p style="font-size: medium">Ilość podarowanych worków: {{ elem.quantity }},<br>
+          Z kategorii:
+{% for el in elem.categories.all %}
+{{ el.name }}{% if not forloop.last %}, {% endif %}
+    {% endfor %}
+    <br>Wsparta organizacja: {{ elem.institution }},<br>
+    Czas odbioru: {{ elem.pick_up_date }}, {{ elem.pick_up_time }}
+       <br>
+        {% empty %}
+        <p>Nie ma jeszcze dotacji.</p>
+    {% endfor %}
+    </p>
+    </div>
+          </div>
+        </div>
+    </header>
+
+
+  {% endblock %}

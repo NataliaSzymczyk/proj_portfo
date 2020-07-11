@@ -18,7 +18,7 @@ from django.urls import path
 from charity_donation.views import *
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls, name='admin'),
     path('', LandingPage.as_view(), name='index'),
     path('add-donation/', AddDonation.as_view(), name='add-donation'),
     path('login/', LoginView.as_view(), name='login'),
@@ -27,4 +27,5 @@ urlpatterns = [
     path('user-profile/', UserProfile.as_view(), name='user-profile'),
     path('user-edit/', EditUser.as_view(), name='user-edit'),
     path('user-password/', UserPassword.as_view(), name='user-password'),
+    path('user-donations/', UserDonations.as_view(), name='user-donations'),
 ]
