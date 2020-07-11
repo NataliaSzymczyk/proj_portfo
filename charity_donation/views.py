@@ -23,7 +23,8 @@ class LandingPage(View):
 
 class AddDonation(View):
     def get(self, request):
-        return render(request, 'form.html')
+        categories = Category.objects.all()
+        return render(request, 'form.html', {"categories":categories})
 
 
 class UserProfile(LoginRequiredMixin, View):
