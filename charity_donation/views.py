@@ -1,5 +1,5 @@
 from datetime import date
-
+from django.core.paginator import Paginator
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
@@ -15,6 +15,7 @@ from django.db.models import Sum, Count
 
 class LandingPage(View):
     def get(self, request):
+
         all_donations = Donation.objects.aggregate(Sum('quantity'))
         supperted_foundations = Donation.objects.annotate(total=Count('institution', distinct=True))
         list_of = []
@@ -28,6 +29,9 @@ class LandingPage(View):
         foundations = Institution.objects.filter(type='Fundacja')
         organizations = Institution.objects.filter(type='Organizacja_pozarządowa')
         collections= Institution.objects.filter(type='Zbiórka_lokalna')
+        p = Paginator(foundations, 3)
+        # page = request.GET.get('page')
+        # contacts = paginator.get_page(page)
         return render(request, 'index.html', {"foundations":foundations,
                                               "organizations":organizations,
                                               "collections":collections,
@@ -53,6 +57,33 @@ class UserDonations(LoginRequiredMixin, View):
         donated_by_me_with_time = Donation.objects.filter(user=self.request.user).filter(pick_up_date__gt=dzis).order_by('pick_up_date')
         return render(request, 'user-donations.html', {"donated_by_me":donated_by_me, 'dzis':dzis,
                                                        "donated_by_me_with_time":donated_by_me_with_time})
+
+    def post(self, request):
+        donated_by_me = Donation.objects.filter(user=self.request.user).order_by('pick_up_date')
+        dzis = date.today()
+        donated_by_me_with_time = Donation.objects.filter(user=self.request.user).filter(
+            pick_up_date__gt=dzis).order_by('pick_up_date')
+        try:
+            odebrane = int(request.POST['odebrane'])
+            if odebrane != None:
+                x = Donation.objects.get(id=odebrane)
+                x.is_taken = True
+                x.save()
+            return render(request, 'user-donations.html', {"donated_by_me": donated_by_me, 'dzis': dzis,
+                                                       "donated_by_me_with_time": donated_by_me_with_time})
+
+        except:
+            nieodebrane = int(request.POST['nieodebrane'])
+            if nieodebrane != None:
+                x = Donation.objects.get(id=nieodebrane)
+                x.is_taken=True
+                x.save()
+                return render(request, 'user-donations.html', {"donated_by_me": donated_by_me, 'dzis': dzis,
+                                                       "donated_by_me_with_time": donated_by_me_with_time})
+
+        # if is_taken=='Zaznacz jako nieodebrane':
+        #
+        # if is_taken=='Zaznacz jako odebrane'
 
 
 class EditUser(LoginRequiredMixin, View):

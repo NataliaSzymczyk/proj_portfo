@@ -6,11 +6,37 @@
           {% include 'nav.html' %}
 
 <div class="slogan container container--90">
-        <div class="slogan--item">
-<div class="about-us--text">
+        <p class="slogan--item">
+<form class="about-us--text">
+<table>
     {% for elem in donated_by_me %}
 
-    <p style="font-size: medium">Ilość podarowanych worków: {{ elem.quantity }},<br>
+<tr>
+    <td>
+
+    {% if elem.is_taken %}
+
+            <form action="" method="post">
+    {% csrf_token %}
+          <input type="text" name="odebrane" value="{{ elem.id }}" hidden/>
+              <button type="submit" class="btn btn--highlighted" value="Odebrane" />ODEBRANE<br>
+                                                                Zaznacz jako nieodebrane</button>
+            </form>
+        {% else %}
+            <form action="" method="post">
+    {% csrf_token %}
+                <input type="text" name="nieodebrane" value="{{ elem.id }}" hidden/>
+
+                <button class="btn btn--highlighted" type="submit"/>NIEODEBRANE<br>
+                                                                Zaznacz jako nieodebrane</button>
+            </form>
+    {% endif %}
+    </td>
+<td>{% if elem.is_taken %}<p style="color: #19865C; font-size: medium">
+{% else %}
+    <p style="font-size: medium">
+{% endif %}
+    Ilość podarowanych worków: {{ elem.quantity }},<br>
           Z kategorii:
 {% for el in elem.categories.all %}
 {{ el.name }}{% if not forloop.last %}, {% endif %}
@@ -19,8 +45,8 @@
     Czas odbioru: {{ elem.pick_up_date }}, {{ elem.pick_up_time }}
        <br>
         {% empty %}
-        <p>Nie ma jeszcze dotacji.</p>
-    {% endfor %}
+        <p>Nie ma jeszcze dotacji.</p></td></tr>
+    {% endfor %}</table>
     </p>
     </div>
           </div>
