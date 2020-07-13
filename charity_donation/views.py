@@ -29,7 +29,7 @@ class LandingPage(View):
         foundations = Institution.objects.filter(type='Fundacja')
         organizations = Institution.objects.filter(type='Organizacja_pozarządowa')
         collections= Institution.objects.filter(type='Zbiórka_lokalna')
-        p = Paginator(foundations, 3)
+        p = Paginator(foundations, 2)
         # page = request.GET.get('page')
         # contacts = paginator.get_page(page)
         return render(request, 'index.html', {"foundations":foundations,
@@ -67,7 +67,7 @@ class UserDonations(LoginRequiredMixin, View):
             odebrane = int(request.POST['odebrane'])
             if odebrane != None:
                 x = Donation.objects.get(id=odebrane)
-                x.is_taken = True
+                x.is_taken = False
                 x.save()
             return render(request, 'user-donations.html', {"donated_by_me": donated_by_me, 'dzis': dzis,
                                                        "donated_by_me_with_time": donated_by_me_with_time})

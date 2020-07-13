@@ -20,7 +20,7 @@
     {% csrf_token %}
           <input type="text" name="odebrane" value="{{ elem.id }}" hidden/>
               <button type="submit" class="btn btn--highlighted" value="Odebrane" />ODEBRANE<br>
-                                                                Zaznacz jako nieodebrane</button>
+                                                                Tu będzie data</button>
             </form>
         {% else %}
             <form action="" method="post">
@@ -28,7 +28,7 @@
                 <input type="text" name="nieodebrane" value="{{ elem.id }}" hidden/>
 
                 <button class="btn btn--highlighted" type="submit"/>NIEODEBRANE<br>
-                                                                Zaznacz jako nieodebrane</button>
+                                                                </button>
             </form>
     {% endif %}
     </td>
