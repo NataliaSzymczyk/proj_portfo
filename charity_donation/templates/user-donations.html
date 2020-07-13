@@ -7,7 +7,7 @@
 
 <div class="slogan container container--90">
         <p class="slogan--item">
-<form class="about-us--text">
+
 <table>
     {% for elem in donated_by_me %}
 
@@ -15,24 +15,24 @@
     <td>
 
     {% if elem.is_taken %}
-
             <form action="" method="post">
     {% csrf_token %}
           <input type="text" name="odebrane" value="{{ elem.id }}" hidden/>
               <button type="submit" class="btn btn--highlighted" value="Odebrane" />ODEBRANE<br>
-                                                                Tu będzie data</button>
+                                                                (klik:{{ elem.click_date }})</button>
             </form>
+
         {% else %}
             <form action="" method="post">
     {% csrf_token %}
                 <input type="text" name="nieodebrane" value="{{ elem.id }}" hidden/>
-
-                <button class="btn btn--highlighted" type="submit"/>NIEODEBRANE<br>
-                                                                </button>
+                <button class="btn btn--highlighted" type="submit"/>NIEODEBRANE</button>
             </form>
     {% endif %}
     </td>
-<td>{% if elem.is_taken %}<p style="color: #19865C; font-size: medium">
+
+<td>
+        {% if elem.is_taken %}<p style="color: #19865C; font-size: medium">
 {% else %}
     <p style="font-size: medium">
 {% endif %}
@@ -45,12 +45,13 @@
     Czas odbioru: {{ elem.pick_up_date }}, {{ elem.pick_up_time }}
        <br>
         {% empty %}
-        <p>Nie ma jeszcze dotacji.</p></td></tr>
-    {% endfor %}</table>
-    </p>
+        <p>Nie ma jeszcze dotacji.</p>
+        </td>
+    {% endfor %}
+    </tr>
+    </table>
+
     </div>
-          </div>
-        </div>
     </header>
 
 

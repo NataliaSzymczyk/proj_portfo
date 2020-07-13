@@ -8,7 +8,6 @@ from django.urls import reverse
 from django.views import View
 from .models import Category, Donation, Institution
 from .forms import EditPassword
-
 from django.db.models import Sum, Count
 
 
@@ -42,7 +41,36 @@ class LandingPage(View):
 class AddDonation(View):
     def get(self, request):
         categories = Category.objects.all()
-        return render(request, 'form.html', {"categories":categories})
+        institutions = Institution.objects.all()
+        return render(request, 'form.html', {"categories":categories, "institutions":institutions})
+    # def post(self, request):
+        # quantity = request.POST.get("bags")
+        # chosen_organization = request.POST.get("organization")
+        # got_organization = Institution.objects.get(id=chosen_organization)
+        # # zbierze id -dokonczyc
+        # adress = request.POST.get("adress")
+        # city = request.POST.get("city")
+        # zip_code = request.POST.get("postcode")
+        # phone_number = request.POST.get("phone")
+        # pick_up_date = request.POST.get("data")
+        # pick_up_time = request.POST.get("time")
+        # pick_up_comment = request.POST.get("more_info")
+        # user = self.request.user
+        # #
+        # categories = request.POST.getlist("categories") #getlist
+        #
+        # new_d = Donation.objects.create(quantity=quantity, institution=got_organization,
+        #                                 adress=adress, city=city, zip_code=zip_code,
+        #                                 phone_number=phone_number, pick_up_time=pick_up_time,
+        #                                 pick_up_date=pick_up_date, pick_up_comment=pick_up_comment,
+        #                                 user=user)
+        # for element in categories:
+        #     new_d.categories.add(int(element)) #int?
+        # new_d.save() #
+        #
+        # #is_taken ma default, click_date może być null
+        #
+
 
 
 class UserProfile(LoginRequiredMixin, View):
@@ -52,14 +80,15 @@ class UserProfile(LoginRequiredMixin, View):
 
 class UserDonations(LoginRequiredMixin, View):
     def get(self, request):
-        donated_by_me = Donation.objects.filter(user=self.request.user).order_by('pick_up_date')
+        donated_by_me = Donation.objects.filter(user=self.request.user).order_by('-click_date')
         dzis = date.today()
         donated_by_me_with_time = Donation.objects.filter(user=self.request.user).filter(pick_up_date__gt=dzis).order_by('pick_up_date')
         return render(request, 'user-donations.html', {"donated_by_me":donated_by_me, 'dzis':dzis,
                                                        "donated_by_me_with_time":donated_by_me_with_time})
 
     def post(self, request):
-        donated_by_me = Donation.objects.filter(user=self.request.user).order_by('pick_up_date')
+        today_is = date.today()
+        donated_by_me = Donation.objects.filter(user=self.request.user).order_by('-click_date')
         dzis = date.today()
         donated_by_me_with_time = Donation.objects.filter(user=self.request.user).filter(
             pick_up_date__gt=dzis).order_by('pick_up_date')
@@ -68,6 +97,7 @@ class UserDonations(LoginRequiredMixin, View):
             if odebrane != None:
                 x = Donation.objects.get(id=odebrane)
                 x.is_taken = False
+                x.click_date = None
                 x.save()
             return render(request, 'user-donations.html', {"donated_by_me": donated_by_me, 'dzis': dzis,
                                                        "donated_by_me_with_time": donated_by_me_with_time})
@@ -77,6 +107,7 @@ class UserDonations(LoginRequiredMixin, View):
             if nieodebrane != None:
                 x = Donation.objects.get(id=nieodebrane)
                 x.is_taken=True
+                x.click_date = today_is
                 x.save()
                 return render(request, 'user-donations.html', {"donated_by_me": donated_by_me, 'dzis': dzis,
                                                        "donated_by_me_with_time": donated_by_me_with_time})

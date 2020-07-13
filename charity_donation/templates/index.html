@@ -58,8 +58,11 @@
           <p>kurier przyjedzie w dogodnym terminie</p>
         </div>
       </div>
+        {% if user.is_authenticated %}
 
+        {% else %}
       <a href="{% url 'register' %}" class="btn btn--large">Załóż konto</a>
+    {% endif %}
     </section>
 
     <section id="about-us" class="about-us">
