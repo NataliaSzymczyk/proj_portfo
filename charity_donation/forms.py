@@ -9,7 +9,7 @@ def validate_passwords(password1,password2):
     sp_characters = "[~!@#$%^&*()\+{}\":;'\[\]]"
     # sp_characters = "[!#$%&'()*+,-./:;<=>?@'[\]^_`{|}"~]"
     if password1!=password2:
-        raise ValidationError("Hasła się nie zgadzają")
+        raise ValidationError("Hasła się nie zgadzają.")
     if len(password1) < 8:
         raise ValidationError('Hasło musi mieć minimum 8 znaków.')
     if not any(char.isdigit() for char in password1):

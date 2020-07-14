@@ -188,16 +188,40 @@ class LogoutView(LoginRequiredMixin, View): #wylog.
         return redirect('index')
 
 
+
+
 class Register(View):
     def get(self, request):
         return render(request, 'register.html')
     def post(self, request):
+
         name = request.POST['name']
         surname = request.POST['surname']
         email = request.POST['email']
-        password = request.POST['password']
+        password1 = request.POST['password']
         password2 = request.POST['password2']
-        if password == password2:
-            User.objects.create_user(username=email, email=email, password=password,
+
+        sp_characters = "[!#$%&'()*+,-./:;<=>?@'[\]^_`{|}\"~]"
+
+        if password1 != password2:
+            msg = "Hasła się nie zgadzają."
+            return render(request, 'register.html', {"msg":msg})
+        elif len(password1) < 8:
+            msg = 'Hasło musi mieć minimum 8 znaków.'
+            return render(request, 'register.html', {"msg":msg})
+        elif not any(char.isdigit() for char in password1):
+            msg = 'Hasło musi zawierać minimum jedną cyfrę.'
+            return render(request, 'register.html', {"msg":msg})
+        elif not any(char.islower() for char in password1):
+            msg = 'Hasło musi zawierać przynajmniej 1 małą literę.'
+            return render(request, 'register.html', {"msg":msg})
+        elif not any(char.isupper() for char in password1):
+            msg = 'Hasło musi zawierać przynajmniej 1 dużą literę.'
+            return render(request, 'register.html', {"msg":msg})
+        elif not any(char in sp_characters for char in password1):
+            msg = 'Hasło musi zawierać przynajmniej 1 znak specjalny, czyli jeden z tych: ' + sp_characters
+            return render(request, 'register.html', {"msg":msg})
+        else:
+            User.objects.create_user(username=email, email=email, password=password1,
                                                 first_name=name, last_name=surname)
-        return redirect(reverse('login'))
+            return redirect(reverse('login'))#

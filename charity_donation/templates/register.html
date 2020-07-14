@@ -6,7 +6,8 @@
     </header>
 
     <section class="login-page">
-      <h2>Załóż konto</h2>
+     {% if msg %} <h2>{{ msg }}</h2>{% else %}<h2>Załóż konto</h2>{% endif %}
+
       <form action="" method="post">
           {% csrf_token %}
         <div class="form-group">
@@ -19,7 +20,7 @@
           <input type="email" name="email" placeholder="Email" />
         </div>
         <div class="form-group">
-          <input type="password" name="password" placeholder="Hasło" />
+          <input type="password" name="password" placeholder="Hasło (min.8znaków)" />
         </div>
         <div class="form-group">
           <input type="password" name="password2" placeholder="Powtórz hasło" />
