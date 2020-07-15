@@ -19,7 +19,7 @@
     {% csrf_token %}
           <input type="text" name="odebrane" value="{{ elem.id }}" hidden/>
               <button type="submit" class="btn btn--highlighted" value="Odebrane" />ODEBRANE<br>
-                                                                (klik:{{ elem.click_date }})</button>
+                                                                {{ elem.pick_up_date }}</button>
             </form>
 
         {% else %}

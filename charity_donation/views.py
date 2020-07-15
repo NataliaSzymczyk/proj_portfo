@@ -28,6 +28,7 @@ class LandingPage(View):
         foundations = Institution.objects.filter(type='Fundacja')
         organizations = Institution.objects.filter(type='Organizacja_pozarządowa')
         collections= Institution.objects.filter(type='Zbiórka_lokalna')
+
         p = Paginator(foundations, 2)
         # page = request.GET.get('page')
         # contacts = paginator.get_page(page)
@@ -80,7 +81,7 @@ class UserProfile(LoginRequiredMixin, View):
 
 class UserDonations(LoginRequiredMixin, View):
     def get(self, request):
-        donated_by_me = Donation.objects.filter(user=self.request.user).order_by('-click_date')
+        donated_by_me = Donation.objects.filter(user=self.request.user).order_by('-pick_up_date')
         dzis = date.today()
         donated_by_me_with_time = Donation.objects.filter(user=self.request.user).filter(pick_up_date__gt=dzis).order_by('pick_up_date')
         return render(request, 'user-donations.html', {"donated_by_me":donated_by_me, 'dzis':dzis,

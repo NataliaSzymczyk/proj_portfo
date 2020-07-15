@@ -6,8 +6,7 @@ from django.contrib.auth.models import User
 
 
 def validate_passwords(password1,password2):
-    sp_characters = "[~!@#$%^&*()\+{}\":;'\[\]]"
-    # sp_characters = "[!#$%&'()*+,-./:;<=>?@'[\]^_`{|}"~]"
+    sp_characters = "[!#$%&'()*+,-./:;<=>?@'[\]^_`{|}\"~]"
     if password1!=password2:
         raise ValidationError("Hasła się nie zgadzają.")
     if len(password1) < 8:

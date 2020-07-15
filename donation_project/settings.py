@@ -101,6 +101,9 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
+{
+        'NAME': 'charity_donation.validators.password_len_validation',
+    },
 ]
 
 
