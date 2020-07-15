@@ -81,18 +81,16 @@ class UserProfile(LoginRequiredMixin, View):
 
 class UserDonations(LoginRequiredMixin, View):
     def get(self, request):
-        donated_by_me = Donation.objects.filter(user=self.request.user).order_by('-pick_up_date')
-        dzis = date.today()
-        donated_by_me_with_time = Donation.objects.filter(user=self.request.user).filter(pick_up_date__gt=dzis).order_by('pick_up_date')
-        return render(request, 'user-donations.html', {"donated_by_me":donated_by_me, 'dzis':dzis,
-                                                       "donated_by_me_with_time":donated_by_me_with_time})
+        donated_by_me = Donation.objects.filter(user=self.request.user).order_by('is_taken', 'pick_up_date')
+        # donated_by_me = Donation.objects.filter(user=self.request.user).order_by('is_taken', 'pick_up_date', 'click_date')
+
+        return render(request, 'user-donations.html', {"donated_by_me":donated_by_me})
 
     def post(self, request):
         today_is = date.today()
-        donated_by_me = Donation.objects.filter(user=self.request.user).order_by('-click_date')
-        dzis = date.today()
-        donated_by_me_with_time = Donation.objects.filter(user=self.request.user).filter(
-            pick_up_date__gt=dzis).order_by('pick_up_date')
+        donated_by_me = Donation.objects.filter(user=self.request.user).order_by('is_taken', 'pick_up_date')
+        # donated_by_me = Donation.objects.filter(user=self.request.user).order_by('is_taken', 'pick_up_date', 'click_date')
+
         try:
             odebrane = int(request.POST['odebrane'])
             if odebrane != None:
@@ -100,9 +98,7 @@ class UserDonations(LoginRequiredMixin, View):
                 x.is_taken = False
                 x.click_date = None
                 x.save()
-            return render(request, 'user-donations.html', {"donated_by_me": donated_by_me, 'dzis': dzis,
-                                                       "donated_by_me_with_time": donated_by_me_with_time})
-
+            return render(request, 'user-donations.html', {"donated_by_me": donated_by_me})
         except:
             nieodebrane = int(request.POST['nieodebrane'])
             if nieodebrane != None:
@@ -110,12 +106,9 @@ class UserDonations(LoginRequiredMixin, View):
                 x.is_taken=True
                 x.click_date = today_is
                 x.save()
-                return render(request, 'user-donations.html', {"donated_by_me": donated_by_me, 'dzis': dzis,
-                                                       "donated_by_me_with_time": donated_by_me_with_time})
+                return render(request, 'user-donations.html', {"donated_by_me": donated_by_me})
 
-        # if is_taken=='Zaznacz jako nieodebrane':
-        #
-        # if is_taken=='Zaznacz jako odebrane'
+
 
 
 class EditUser(LoginRequiredMixin, View):
@@ -145,7 +138,7 @@ class EditUser(LoginRequiredMixin, View):
 
 
 class UserPassword(LoginRequiredMixin, View):
-    # !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
+    # sp = "[!#$%&'()*+,-./:;<=>?@'[\]^_`{|}\"~]"
     def get(self, request):
         form = EditPassword()
         return render(request, 'user-edit-pass.html', {"form":form})
@@ -189,8 +182,6 @@ class LogoutView(LoginRequiredMixin, View): #wylog.
         return redirect('index')
 
 
-
-
 class Register(View):
     def get(self, request):
         return render(request, 'register.html')
@@ -201,7 +192,7 @@ class Register(View):
         email = request.POST['email']
         password1 = request.POST['password']
         password2 = request.POST['password2']
-
+        # value = password1
         sp_characters = "[!#$%&'()*+,-./:;<=>?@'[\]^_`{|}\"~]"
 
         if password1 != password2:
