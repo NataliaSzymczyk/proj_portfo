@@ -102,21 +102,21 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 
-    {
-        'NAME': 'charity_donation.validators.password_len_validation',
-    },
-    {
-        'NAME': 'charity_donation.validators.number_validator',
-    },
-    {
-        'NAME': 'charity_donation.validators.lower_letter_validator',
-    },
-    {
-        'NAME': 'charity_donation.validators.upper_letter_validator',
-    },
-    {
-        'NAME': 'charity_donation.validators.special_character_validator',
-    },
+    # {
+    #     'NAME': 'charity_donation.validators.password_len_validation',
+    # },
+    # {
+    #     'NAME': 'charity_donation.validators.number_validator',
+    # },
+    # {
+    #     'NAME': 'charity_donation.validators.lower_letter_validator',
+    # },
+    # {
+    #     'NAME': 'charity_donation.validators.upper_letter_validator',
+    # },
+    # {
+    #     'NAME': 'charity_donation.validators.special_character_validator',
+    # },
 ]
 
 
