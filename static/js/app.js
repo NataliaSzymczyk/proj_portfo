@@ -235,7 +235,78 @@ document.addEventListener("DOMContentLoaded", function() {
       this.$step.parentElement.hidden = this.currentStep >= 6;
 
       // TODO: get data from inputs and show them in summary
+
+
+    // let przejdzDalej = document.getElementById('idz-dalej');
+    let checkboxes = document.querySelectorAll(".moje-pole");
+    let organizations = document.querySelectorAll('.organization');
+    let tablica = [];
+
+
+  if (this.currentStep == 3) {
+
+    for (let i = 0; i < checkboxes.length; i++) {
+      if (checkboxes[i].checked) {
+        tablica.push(checkboxes[i].value);
+      }
     }
+
+    for(let j=0; j<organizations.length; j++){
+      let a = organizations[j].dataset.id.replace(/(\r\n|\n|\r)/gm,",").split(",")
+      if (a[0] == "") {
+        a.shift()
+      }
+
+        if(checkArrays(tablica, a)){
+        console.log('znajdują się');
+        organizations[j].parentElement.parentElement.style.display = "block";
+      }else{
+        console.log('nie znajdują się');
+        organizations[j].parentElement.parentElement.style.display = "none";
+      }
+
+        function checkArrays(array1, array2) {
+          for (let k = 0; k < array1.length; k++) {
+           if (array2.includes(array1[k])) {
+          } else {
+            console.log('wypisz false');
+           return false;
+          }
+        }
+        return true;
+      }
+    }
+  }
+
+      let bags = $("#bags").val();
+      $("#donation-bags").text(bags + ' szt.');
+      let address = $("#address").val();
+      $("#donation-address").text(address);
+      let city = $("#city").val();
+      $("#donation-city").text(city);
+      let postcode = $("#postcode").val();
+      $("#donation-postcode").text(postcode);
+      let phone = $("#phone").val();
+      $("#donation-phone").text(phone);
+      let date = $("#date").val();
+      $("#donation-date").text(date);
+      let time = $("#time").val();
+      $("#donation-time").text(time);
+      let more_info = $("#more_info").val();
+      $("#donation-more-info").text(more_info);
+
+
+  if (this.currentStep == 4) {
+
+    for (let i = 0; i < organizations.length; i++) {
+      if (organizations[i].checked) {
+       let checked_organization =  organizations[i].dataset.name;
+             console.log('wartosc nowsze',checked_organization);
+              $("#donation-organization").text('Dla: ' + checked_organization);
+      }
+    }
+  }
+}
 
     /**
      * Submit form
@@ -243,13 +314,20 @@ document.addEventListener("DOMContentLoaded", function() {
      * TODO: validation, send data to server
      */
     submit(e) {
-      e.preventDefault();
+      // e.preventDefault();
       this.currentStep++;
       this.updateForm();
     }
   }
+
   const form = document.querySelector(".form--steps");
   if (form !== null) {
     new FormSteps(form);
   }
 });
+
+
+
+
+
+

@@ -102,21 +102,21 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 
-    # {
-    #     'NAME': 'charity_donation.validators.password_len_validation',
-    # },
-    # {
-    #     'NAME': 'charity_donation.validators.number_validator',
-    # },
-    # {
-    #     'NAME': 'charity_donation.validators.lower_letter_validator',
-    # },
-    # {
-    #     'NAME': 'charity_donation.validators.upper_letter_validator',
-    # },
-    # {
-    #     'NAME': 'charity_donation.validators.special_character_validator',
-    # },
+    {
+        'NAME': 'charity_donation.validators.password_len_validation',
+    },
+    {
+        'NAME': 'charity_donation.validators.number_validator',
+    },
+    {
+        'NAME': 'charity_donation.validators.lower_letter_validator',
+    },
+    {
+        'NAME': 'charity_donation.validators.upper_letter_validator',
+    },
+    {
+        'NAME': 'charity_donation.validators.special_character_validator',
+    },
 ]
 
 
@@ -147,3 +147,13 @@ STATICFILES_DIRS = (
 LOGIN_REDIRECT_URL = '/index'
 
 LOGIN_URL = '/login'
+
+if DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# EMAIL_USE_TLS = True
+# EMAIL_HOST = 'smtp.wp.pl'
+# EMAIL_PORT = 465
+# EMAIL_HOST_USER = 'n_007@wp.pl'
+# EMAIL_HOST_PASSWORD = 'tobedziehaslo'
+# DEFAULT_FROM_EMAIL = 'n_007@wp.pl'

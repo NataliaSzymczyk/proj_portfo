@@ -3,12 +3,18 @@ from django.core.paginator import Paginator
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
 from .models import Category, Donation, Institution
 from .forms import EditPassword
 from django.db.models import Sum, Count
+import os
+
+
+import smtplib
+from email.message import EmailMessage
 
 
 
@@ -37,41 +43,96 @@ class LandingPage(View):
                                               "collections":collections,
                                               "all_donations":all_donations,
                                               "supported_institution":supported_institution,})
+    def post(self, request):
+        superusers = User.objects.filter(is_superuser=True)
+        mail_list = []
+        for user in superusers:
+            mail_list.append(user.email)
+
+        name = request.POST['name']
+        surname = request.POST['surname']
+        message = request.POST['message']
+
+        msg = EmailMessage()
+        msg['Subject'] = 'Wiadomość kontaktowa'
+        msg['From'] = f'{name} {surname} <n_007@wp.pl>'
+        msg['To'] = mail_list
+        msg.set_content(f'{message}')
+
+        login4project = os.environ.get('EMAIL_LOGIN_4PROJECT')
+        password4project = os.environ.get('EMAIL_PASS_4PROJECT')
+
+        server = smtplib.SMTP_SSL('smtp.wp.pl', 465)
+        # server.ehlo()
+        server.login('n_007@wp.pl', 'tobedziehaslo')
+        # server.login(login4project, password4project)
+        server.set_debuglevel(0)
+        server.send_message(msg)
+        server.quit()
+
+        return redirect('index')
+
 
 
 class AddDonation(View):
     def get(self, request):
         categories = Category.objects.all()
         institutions = Institution.objects.all()
-        return render(request, 'form.html', {"categories":categories, "institutions":institutions})
-    # def post(self, request):
-        # quantity = request.POST.get("bags")
-        # chosen_organization = request.POST.get("organization")
-        # got_organization = Institution.objects.get(id=chosen_organization)
-        # # zbierze id -dokonczyc
-        # adress = request.POST.get("adress")
-        # city = request.POST.get("city")
-        # zip_code = request.POST.get("postcode")
-        # phone_number = request.POST.get("phone")
-        # pick_up_date = request.POST.get("data")
-        # pick_up_time = request.POST.get("time")
-        # pick_up_comment = request.POST.get("more_info")
-        # user = self.request.user
-        # #
-        # categories = request.POST.getlist("categories") #getlist
-        #
-        # new_d = Donation.objects.create(quantity=quantity, institution=got_organization,
-        #                                 adress=adress, city=city, zip_code=zip_code,
-        #                                 phone_number=phone_number, pick_up_time=pick_up_time,
-        #                                 pick_up_date=pick_up_date, pick_up_comment=pick_up_comment,
-        #                                 user=user)
-        # for element in categories:
-        #     new_d.categories.add(int(element)) #int?
-        # new_d.save() #
-        #
-        # #is_taken ma default, click_date może być null
-        #
 
+        try:
+            chosen_categories = request.GET.getlist("categories")  # getlist
+            institutions_to_choose = Donation.categories.filter(donation__institution_id__in=chosen_categories)
+            return render(request, 'form.html', {"categories":categories, "institutions":institutions, "institutions_to_choose":institutions_to_choose})
+        except Exception:
+
+        #.select_related() ?
+        # zm0 = []
+        # if request.is_ajax():
+        #     zm = request.GET.getlist('categories')
+        #     for element in zm:
+        #         zm0.append(int(element))
+        #         return render(request, 'form.html', {"categories":categories, "institutions":institutions, "zm0":zm0})
+            return render(request, 'form.html', {"categories":categories, "institutions":institutions})
+    def post(self, request):
+        quantity = request.POST.get("bags")
+        chosen_organization = request.POST.get("organization")
+        got_organization = Institution.objects.get(id=chosen_organization)
+
+        address = request.POST.get("address")
+        city = request.POST.get("city")
+        zip_code = request.POST.get("postcode")
+        phone_number = request.POST.get("phone")
+        pick_up_date = request.POST.get("date")
+        pick_up_time = request.POST.get("time")
+        pick_up_comment = request.POST.get("more_info")
+        user = self.request.user
+
+        categories = request.POST.getlist("categories") #getlist
+
+        new_donation = Donation()
+        new_donation.quantity = quantity
+        new_donation.institution = got_organization
+        new_donation.address = address
+        new_donation.city = city
+        new_donation.zip_code = zip_code
+        new_donation.phone_number = phone_number
+        new_donation.pick_up_time = pick_up_time
+        new_donation.pick_up_date = pick_up_date
+        new_donation.pick_up_comment = pick_up_comment
+        new_donation.user = user
+        new_donation.save()
+
+        for element in categories:
+            new_donation.categories.add(int(element)) #int?
+        new_donation.save() # niepotrzebn
+
+        #is_taken ma default, click_date może być null
+        return redirect('confirmation')
+
+
+class FormConfirmation(LoginRequiredMixin, View):
+    def get(self, request):
+        return render(request, 'form-confirmation.html')
 
 
 class UserProfile(LoginRequiredMixin, View):
@@ -198,21 +259,21 @@ class Register(View):
         if password1 != password2:
             msg = "Hasła się nie zgadzają."
             return render(request, 'register.html', {"msg":msg})
-        elif len(password1) < 8:
-            msg = 'Hasło musi mieć minimum 8 znaków.'
-            return render(request, 'register.html', {"msg":msg})
-        elif not any(char.isdigit() for char in password1):
-            msg = 'Hasło musi zawierać minimum jedną cyfrę.'
-            return render(request, 'register.html', {"msg":msg})
-        elif not any(char.islower() for char in password1):
-            msg = 'Hasło musi zawierać przynajmniej 1 małą literę.'
-            return render(request, 'register.html', {"msg":msg})
-        elif not any(char.isupper() for char in password1):
-            msg = 'Hasło musi zawierać przynajmniej 1 dużą literę.'
-            return render(request, 'register.html', {"msg":msg})
-        elif not any(char in sp_characters for char in password1):
-            msg = 'Hasło musi zawierać przynajmniej 1 znak specjalny, czyli jeden z tych: ' + sp_characters
-            return render(request, 'register.html', {"msg":msg})
+        # elif len(password1) < 8:
+        #     msg = 'Hasło musi mieć minimum 8 znaków.'
+        #     return render(request, 'register.html', {"msg":msg})
+        # elif not any(char.isdigit() for char in password1):
+        #     msg = 'Hasło musi zawierać minimum jedną cyfrę.'
+        #     return render(request, 'register.html', {"msg":msg})
+        # elif not any(char.islower() for char in password1):
+        #     msg = 'Hasło musi zawierać przynajmniej 1 małą literę.'
+        #     return render(request, 'register.html', {"msg":msg})
+        # elif not any(char.isupper() for char in password1):
+        #     msg = 'Hasło musi zawierać przynajmniej 1 dużą literę.'
+        #     return render(request, 'register.html', {"msg":msg})
+        # elif not any(char in sp_characters for char in password1):
+        #     msg = 'Hasło musi zawierać przynajmniej 1 znak specjalny, czyli jeden z tych: ' + sp_characters
+        #     return render(request, 'register.html', {"msg":msg})
         else:
             User.objects.create_user(username=email, email=email, password=password1,
                                                 first_name=name, last_name=surname)

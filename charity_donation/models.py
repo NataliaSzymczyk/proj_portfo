@@ -14,7 +14,7 @@ class Category(models.Model):
 
 
 class Institution(models.Model):
-    name = models. CharField(max_length=128)
+    name = models.CharField(max_length=128)
     description = models.TextField()
     type = models.CharField(max_length=64, choices=TYPES, default='Fundacja')
     categories = models.ManyToManyField(Category, related_name="categories_institution")
@@ -26,7 +26,7 @@ class Institution(models.Model):
 class Donation(models.Model):
     quantity = models.IntegerField(verbose_name='Liczba worków')
     categories = models.ManyToManyField(Category)
-    institution =models.ForeignKey(Institution, on_delete=models.CASCADE)
+    institution = models.ForeignKey(Institution, on_delete=models.CASCADE)
     address = models.CharField(max_length=128)
     phone_number = models.CharField(max_length=16)
     city = models.CharField(max_length=64)
