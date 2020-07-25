@@ -1,8 +1,26 @@
-from django import forms
 from django.core.exceptions import ValidationError
 from .models import *
 from .views import *
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import PasswordResetForm, UserCreationForm
+from django import forms
+
+
+def validate_email(value):
+    """ Check database before sending email for password reset """
+    try:
+        User.objects.get(email=value)
+    except:
+        raise ValidationError("Nie ma takiego użytkownika")
+
+
+class MyCustomResetForm(PasswordResetForm):
+    email = forms.EmailField(label=("Email"), max_length=254, validators=[validate_email])
+
+
+class CustomForm(UserCreationForm):
+    class Meta(UserCreationForm.Meta):
+        fields = ('username', 'first_name', 'last_name', "password1", "password2")
 
 
 def validate_passwords(password1,password2):

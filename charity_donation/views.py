@@ -1,20 +1,21 @@
+from django.contrib.auth.forms import PasswordResetForm
+from .forms import *
 from datetime import date
 from django.core.paginator import Paginator
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
+from django.forms import forms
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
 from .models import Category, Donation, Institution
-from .forms import EditPassword
 from django.db.models import Sum, Count
 import os
-
-
 import smtplib
 from email.message import EmailMessage
+from .validators import *
 
 
 
@@ -35,7 +36,7 @@ class LandingPage(View):
         organizations = Institution.objects.filter(type='Organizacja_pozarządowa')
         collections= Institution.objects.filter(type='Zbiórka_lokalna')
 
-        p = Paginator(foundations, 2)
+        # p = Paginator(foundations, 2)
         # page = request.GET.get('page')
         # contacts = paginator.get_page(page)
         return render(request, 'index.html', {"foundations":foundations,
@@ -74,6 +75,10 @@ class LandingPage(View):
 
 
 
+
+
+
+
 class AddDonation(View):
     def get(self, request):
         categories = Category.objects.all()
@@ -85,12 +90,6 @@ class AddDonation(View):
             return render(request, 'form.html', {"categories":categories, "institutions":institutions, "institutions_to_choose":institutions_to_choose})
         except Exception:
 
-        #.select_related() ?
-        # zm0 = []
-        # if request.is_ajax():
-        #     zm = request.GET.getlist('categories')
-        #     for element in zm:
-        #         zm0.append(int(element))
         #         return render(request, 'form.html', {"categories":categories, "institutions":institutions, "zm0":zm0})
             return render(request, 'form.html', {"categories":categories, "institutions":institutions})
     def post(self, request):
@@ -246,35 +245,43 @@ class LogoutView(LoginRequiredMixin, View): #wylog.
 class Register(View):
     def get(self, request):
         return render(request, 'register.html')
+
     def post(self, request):
-
-        name = request.POST['name']
-        surname = request.POST['surname']
+        name = request.POST['first_name']
+        surname = request.POST['last_name']
         email = request.POST['email']
-        password1 = request.POST['password']
+        password1 = request.POST['password1']
         password2 = request.POST['password2']
-        # value = password1
-        sp_characters = "[!#$%&'()*+,-./:;<=>?@'[\]^_`{|}\"~]"
 
+        # value = password1
+
+        # form = CustomForm(request.POST)
+        # if form.is_valid():
+        #     form.save()
+        #     return redirect(reverse('login'))#
+        # else:
+        #     return HttpResponse("nie")
+
+        sp_characters = "[!#$%&'()*+,-./:;<=>?@'[\]^_`{|}\"~]"
         if password1 != password2:
             msg = "Hasła się nie zgadzają."
             return render(request, 'register.html', {"msg":msg})
-        # elif len(password1) < 8:
-        #     msg = 'Hasło musi mieć minimum 8 znaków.'
-        #     return render(request, 'register.html', {"msg":msg})
-        # elif not any(char.isdigit() for char in password1):
-        #     msg = 'Hasło musi zawierać minimum jedną cyfrę.'
-        #     return render(request, 'register.html', {"msg":msg})
-        # elif not any(char.islower() for char in password1):
-        #     msg = 'Hasło musi zawierać przynajmniej 1 małą literę.'
-        #     return render(request, 'register.html', {"msg":msg})
-        # elif not any(char.isupper() for char in password1):
-        #     msg = 'Hasło musi zawierać przynajmniej 1 dużą literę.'
-        #     return render(request, 'register.html', {"msg":msg})
-        # elif not any(char in sp_characters for char in password1):
-        #     msg = 'Hasło musi zawierać przynajmniej 1 znak specjalny, czyli jeden z tych: ' + sp_characters
-        #     return render(request, 'register.html', {"msg":msg})
+        elif len(password1) < 8:
+            msg = 'Hasło musi mieć minimum 8 znaków.'
+            return render(request, 'register.html', {"msg":msg})
+        elif not any(char.isdigit() for char in password1):
+            msg = 'Hasło musi zawierać minimum jedną cyfrę.'
+            return render(request, 'register.html', {"msg":msg})
+        elif not any(char.islower() for char in password1):
+            msg = 'Hasło musi zawierać przynajmniej 1 małą literę.'
+            return render(request, 'register.html', {"msg":msg})
+        elif not any(char.isupper() for char in password1):
+            msg = 'Hasło musi zawierać przynajmniej 1 dużą literę.'
+            return render(request, 'register.html', {"msg":msg})
+        elif not any(char in sp_characters for char in password1):
+            msg = 'Hasło musi zawierać przynajmniej 1 znak specjalny, czyli jeden z tych: ' + sp_characters
+            return render(request, 'register.html', {"msg":msg})
         else:
             User.objects.create_user(username=email, email=email, password=password1,
                                                 first_name=name, last_name=surname)
-            return redirect(reverse('login'))#
+            return redirect('login')

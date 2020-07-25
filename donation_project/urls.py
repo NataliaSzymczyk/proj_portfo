@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from charity_donation.views import *
 from django.contrib.auth import views as auth_views
+from charity_donation.forms import MyCustomResetForm
 
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
@@ -45,7 +46,7 @@ urlpatterns = [
          name='password_reset_done'),
 
     path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
-    path('password_reset/', auth_views.PasswordResetView.as_view(template_name='password_reset_form.html'), name='password_reset'),
+    path('password_reset/', auth_views.PasswordResetView.as_view(template_name='password_reset_form.html', form_class=MyCustomResetForm), name='password_reset'),
 
     path('reset/done/',
          auth_views.PasswordResetCompleteView.as_view(template_name='password_reset_complete.html'),

@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-
+from django.contrib.auth.password_validation import NumericPasswordValidator
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -102,21 +102,22 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 
-    {
-        'NAME': 'charity_donation.validators.password_len_validation',
-    },
-    {
-        'NAME': 'charity_donation.validators.number_validator',
-    },
-    {
-        'NAME': 'charity_donation.validators.lower_letter_validator',
-    },
-    {
-        'NAME': 'charity_donation.validators.upper_letter_validator',
-    },
-    {
-        'NAME': 'charity_donation.validators.special_character_validator',
-    },
+    # {
+    #     'NAME': 'charity_donation.validators.PasswordLenValidator',
+    # },
+    # {
+    #     'NAME': 'charity_donation.validators.NumberValidator',
+    # },
+    # {
+    #     'NAME': 'charity_donation.validators.LowLetterValidator',
+    # },
+    # {
+    #     'NAME': 'charity_donation.validators.UpperLetterValidator',
+    # },
+    # {
+    #     'NAME': 'charity_donation.validators.SpecialCharacterValidator',
+    # },
+
 ]
 
 
@@ -157,3 +158,17 @@ if DEBUG:
 # EMAIL_HOST_USER = 'n_007@wp.pl'
 # EMAIL_HOST_PASSWORD = 'tobedziehaslo'
 # DEFAULT_FROM_EMAIL = 'n_007@wp.pl'
+
+
+# # Email configurations
+# EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST='smtp.xyz.com' # Set your email host
+# EMAIL_PORT=587
+# EMAIL_HOST_USER='abc@xyz.com'
+# EMAIL_HOST_PASSWORD='******' #Your password
+# EMAIL_USE_TLS=True
+# DEFAULT_FROM_EMAIL = 'abc@xyz.com'
+
+if os.path.isfile(os.path.join(os.path.dirname(__file__), "settings_local.py")):
+    from .settings_local import *
+    print("Local settings succesfully imported.")
