@@ -2,9 +2,7 @@
 {% load static %}
 {% block content %}
     <header class="header--form-page">
-
           {% include 'nav.html' %}
- 
 
     <section class="login-page">
       {% if msg %} <h2>{{ msg }}</h2>{% else %}<h2>Edytuj</h2>{% endif %}
@@ -12,7 +10,7 @@
        <div class="form-group form-group--buttons" style="text-align: right">
           <a href="{% url 'user-password' %}" class="btn btn--highlighted">Przejdź do zmiany hasła</a>
             </div>
-    <br><br><br>
+        <br><br><br>
         <form method="POST" action="">
         {% csrf_token %}
             <div class="form-group">Username:
@@ -35,9 +33,7 @@
         </div>
       </form>
 
-
     </section>
-
     </header>
 
   {% endblock %}

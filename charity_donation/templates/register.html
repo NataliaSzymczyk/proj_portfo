@@ -1,13 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-        <header>
-    {% include 'nav.html' %}
+    <header>
+        {% include 'nav.html' %}
     </header>
 
     <section class="login-page">
      {% if msg %} <h2>{{ msg }}</h2>{% else %}<h2>Załóż konto</h2>{% endif %}
-
 
           <form action="" method="post"  class="steps">
           {% csrf_token %}
@@ -33,6 +32,5 @@
         </div>
       </form>
     </section>
-
 
   {% endblock %}

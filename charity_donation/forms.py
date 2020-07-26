@@ -18,9 +18,9 @@ class MyCustomResetForm(PasswordResetForm):
     email = forms.EmailField(label=("Email"), max_length=254, validators=[validate_email])
 
 
-class CustomForm(UserCreationForm):
-    class Meta(UserCreationForm.Meta):
-        fields = ('username', 'first_name', 'last_name', "password1", "password2")
+# class CustomForm(UserCreationForm):
+#     class Meta(UserCreationForm.Meta):
+#         fields = ('username', 'first_name', 'last_name', "password1", "password2")
 
 
 def validate_passwords(password1,password2):

@@ -2,57 +2,53 @@
 {% load static %}
 {% block content %}
     <header class="header--form-page">
-
           {% include 'nav.html' %}
 
-<div class="slogan container container--90">
-        <p class="slogan--item">
-
-<table>
-    {% for elem in donated_by_me %}
-
-<tr>
-    <td>
-
-    {% if elem.is_taken %}
+    <section class="login-page">
+    <table>
+        {% for elem in donated_by_me %}
+        <tr>
+        <td>
+        {% if elem.is_taken %}
             <form action="" method="post">
-    {% csrf_token %}
-          <input type="text" name="odebrane" value="{{ elem.id }}" hidden/>
-              <button type="submit" class="btn btn--highlighted" value="Odebrane" />ODEBRANE<br>
+            {% csrf_token %}
+             <input type="text" name="odebrane" value="{{ elem.id }}" hidden/>
+             <button type="submit" class="btn btn--highlighted" value="Odebrane" />ODEBRANE<br>
                                                                 {{ elem.pick_up_date }}</button>
             </form>
 
         {% else %}
             <form action="" method="post">
-    {% csrf_token %}
+                {% csrf_token %}
                 <input type="text" name="nieodebrane" value="{{ elem.id }}" hidden/>
                 <button class="btn btn--highlighted" type="submit"/>NIEODEBRANE</button>
             </form>
-    {% endif %}
-    </td>
-
-<td>
-        {% if elem.is_taken %}<p style="color: #19865C; font-size: medium">
-{% else %}
-    <p style="font-size: medium">
-{% endif %}
-    Ilość podarowanych worków: {{ elem.quantity }},<br>
-          Z kategorii:
-{% for el in elem.categories.all %}
-{{ el.name }}{% if not forloop.last %}, {% endif %}
-    {% endfor %}
-    <br>Wsparta organizacja: {{ elem.institution }},<br>
-    Czas odbioru: {{ elem.pick_up_date }}, {{ elem.pick_up_time }}
-       <br>
-        {% empty %}
-        <p class="slogan--item" style="font-size: medium">Nie ma jeszcze dotacji.</p>
+         {% endif %}
         </td>
-    {% endfor %}
-    </tr>
+    <td>&nbsp;&nbsp;&nbsp;&nbsp;
+    </td>
+        <td>
+        {% if elem.is_taken %}
+            <p style="color: #19865C; font-size: medium">
+        {% else %}
+            <p style="font-size: medium">
+        {% endif %}
+        Ilość podarowanych worków: {{ elem.quantity }},<br>
+              Z kategorii:
+        {% for el in elem.categories.all %}
+        {{ el.name }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+            <br>Wsparta organizacja: {{ elem.institution }},<br>
+            Czas odbioru: {{ elem.pick_up_date }}, {{ elem.pick_up_time }}
+               <br>
+                {% empty %}
+                <p class="slogan--item" style="font-size: medium">Nie ma jeszcze dotacji.</p>
+            </td>
+        {% endfor %}
+        </tr>
     </table>
 
-    </div>
+    </section>
     </header>
-
 
   {% endblock %}

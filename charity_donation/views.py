@@ -18,10 +18,8 @@ from email.message import EmailMessage
 from .validators import *
 
 
-
 class LandingPage(View):
     def get(self, request):
-
         all_donations = Donation.objects.aggregate(Sum('quantity'))
         supperted_foundations = Donation.objects.annotate(total=Count('institution', distinct=True))
         list_of = []
