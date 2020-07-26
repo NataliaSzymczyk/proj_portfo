@@ -2,32 +2,23 @@
 {% load static %}
 {% block content %}
     <header class="header--form-page">
+      {% include 'nav.html' %}
 
-          {% include 'nav.html' %}
-
-<div class="slogan container container--90">
-        <div class="slogan--item">
-   <h1>Twój profil</h1>
-
-<div class="about-us--text">
-    <p>Imię: {{user.first_name}}</p>
-    <p>Nazwisko: {{user.last_name}}</p>
-    <p>E-mail: {{user.email}}</p>
-    <br>
+    <section class="login-page">
+     <div class="slogan--item">
+    <h2>Twój profil</h2>
+     </div>
+    <div class="about-us--text">
+        <p>Imię: {{user.first_name}}</p>
+        <p>Nazwisko: {{user.last_name}}</p>
+        <p>E-mail: {{user.email}}</p>
+        <br>
+    </div>
        <div class="form-group form-group--buttons" style="text-align: right">
           <a href="{% url 'user-donations' %}" class="btn btn--highlighted">Przejdź do Twoich dotychczasowych dotacji</a>
-
-            </div>
-
-    </div>
-          </div>
-        </div>
       </div>
+
+    </section>
     </header>
-
-
-
-
-
 
   {% endblock %}

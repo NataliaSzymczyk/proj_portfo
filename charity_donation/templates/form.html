@@ -2,7 +2,6 @@
 {% load static %}
 {% block content %}
     <header class="header--form-page">
-
     {% include 'nav.html' %}
 
       <div class="slogan container container--90">
@@ -55,26 +54,20 @@
 
       <div class="form--steps-container">
         <div class="form--steps-counter">Krok <span>1</span>/5</div>
-
         <form id="donation" method="post">
           <!-- STEP 1: class .active is switching steps -->
-
           {% csrf_token %}
           <div data-step="1" class="active">
             <h3>Zaznacz co chcesz oddać:</h3>
-
               {% for element in categories %}
               <div class="form-group form-group--checkbox">
               <label>
                 <input type="checkbox" class="moje-pole" name="categories" value="{{ element.id }}" id="{{ element.id }}"/>
-
                 <span class="checkbox"></span>
                 <span class="description">{{ element.name }}</span>
               </label>
             </div>
-{% endfor %}
-
-
+            {% endfor %}
             <div class="form-group form-group--buttons">
               <button id="idz-dalej" type="button" class="btn next-step">Dalej</button>
             </div>
@@ -83,47 +76,42 @@
           <!-- STEP 2 -->
           <div data-step="2">
             <h3>Podaj liczbę 60l worków, w które spakowałeś/aś rzeczy:</h3>
-
             <div class="form-group form-group--inline">
               <label>
                 Liczba 60l worków:
                 <input type="number" name="bags" id="bags" step="1" min="1" />
               </label>
             </div>
-
             <div class="form-group form-group--buttons">
               <button type="button" class="btn prev-step">Wstecz</button>
               <button type="button" class="btn next-step">Dalej</button>
             </div>
           </div>
 
-
-
           <!-- STEP 3 -->
           <div data-step="3">
             <h3>Wybierz organizacje, której chcesz pomóc:</h3>
-{% for el in institutions %}
+            {% for el in institutions %}
 
             <div class="form-group form-group--checkbox">
               <label>
                 <input type="radio" name="organization" class="organization"
                        value="{{ el.id }}" data-id="{% for elem in el.categories.all %}
-{{ elem.id }}{% endfor %}" data-name="{{ el.name }}"/>
+                {{ elem.id }}{% endfor %}" data-name="{{ el.name }}"/>
                 <span class="checkbox radio"></span>
                 <span class="description">{% for element in institutions_to_choose %}{{ element.id }}
                 {% endfor %}
                   <div class="title">{{ el.name }},{{ el.categories_set.category_id }}-{{ el.categories.id }}:<br>
                   {% for elem in el.categories.all %}
-{{ elem.name }}({{ elem.id }}){% if not forloop.last %}, {% endif %}
-    {% endfor %}</div>
+             {{ elem.name }}({{ elem.id }}){% if not forloop.last %}, {% endif %}
+            {% endfor %}</div>
                   <div class="subtitle">
                     {{ el.description }}
                   </div>
                 </span>
               </label>
             </div>
-{% endfor %}
-
+            {% endfor %}
 
             <div class="form-group form-group--buttons">
               <button type="button" class="btn prev-step">Wstecz</button>
@@ -141,11 +129,9 @@
                 <div class="form-group form-group--inline">
                   <label> Ulica <input type="text" name="address" id="address" /> </label>
                 </div>
-
                 <div class="form-group form-group--inline">
                   <label> Miasto <input type="text" name="city" id="city" /> </label>
                 </div>
-
                 <div class="form-group form-group--inline">
                   <label>
                     Kod pocztowy <input type="text" name="postcode" id="postcode" />
@@ -163,13 +149,10 @@
                 <h4>Termin odbioru</h4>
                 <div class="form-group form-group--inline">
                   <label> Data <input type="date" name="date"  id="date" /> </label>
-
                 </div>
-
                 <div class="form-group form-group--inline">
                   <label> Godzina <input type="time" name="time" id="time" /> </label>
                 </div>
-
                 <div class="form-group form-group--inline">
                   <label>
                     Uwagi dla kuriera
@@ -187,7 +170,6 @@
           <!-- STEP 5 -->
           <div data-step="5">
             <h3>Podsumowanie Twojej darowizny</h3>
-
             <div class="summary">
               <div class="form-section">
                 <h4>Oddajesz:</h4>
@@ -196,7 +178,6 @@
                     <span class="icon icon-bag"></span>
                     <span class="summary--text" id="donation-bags"> </span>
                   </li>
-
                   <li>
                     <span class="icon icon-hand"></span>
                     <span class="summary--text" id="donation-organization"> </span>
@@ -232,15 +213,16 @@
             </div>
           </div>
         </form>
-
       </div>
     </section>
-{% else %}
-            <div class="form-group form-group--buttons">
-                <div class="about-us--text"><h2>Aby przekazać dary</h2>
-          <a href="{% url 'login' %}" class="btn btn--without-border">Zaloguj się</a>
-</div>
-        </div>
-{% endif %}
+    {% else %}
+         <section class="login-page">
+             <h2>Aby przekazać dary</h2>
+              <ul class="help--buttons">
+          <li><a href="{% url 'login' %}" class="btn btn--without-border">Zaloguj się</a></li>
+          <li><a href="{% url 'register' %}" class="btn btn--without-border">Załóż konto</a></li>
+              </ul>
+         </section>
+    {% endif %}
 
   {% endblock %}

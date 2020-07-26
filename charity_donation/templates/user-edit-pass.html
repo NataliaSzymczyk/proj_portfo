@@ -6,8 +6,8 @@
 
     <section class="login-page">
       {% if msg %} <h2>{{ msg }}</h2>{% else %}<h2>Zmień hasło:</h2>{% endif %}
-        <br>
-         <form action="" method="post">
+
+         <form action="" method="post" class="steps">
           {% csrf_token %}
           <div class="form-group">
             {{ form.as_p }}
@@ -16,5 +16,4 @@
 
     </section>
     </header>
-
   {% endblock %}

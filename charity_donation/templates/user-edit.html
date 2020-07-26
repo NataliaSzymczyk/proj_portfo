@@ -6,12 +6,8 @@
 
     <section class="login-page">
       {% if msg %} <h2>{{ msg }}</h2>{% else %}<h2>Edytuj</h2>{% endif %}
-        <br>
-       <div class="form-group form-group--buttons" style="text-align: right">
-          <a href="{% url 'user-password' %}" class="btn btn--highlighted">Przejdź do zmiany hasła</a>
-            </div>
-        <br><br><br>
-        <form method="POST" action="">
+
+        <form method="POST" action="" class="steps">
         {% csrf_token %}
             <div class="form-group">Username:
           <input type="text" name="username" value="{{user.username}}"/>
@@ -30,10 +26,11 @@
         </div>
         <div class="form-group form-group--buttons">
           <button class="btn" type="submit">Zapisz </button>
+          <a href="{% url 'user-password' %}" class="btn btn--highlighted">Przejdź do zmiany hasła</a>
         </div>
       </form>
 
     </section>
     </header>
-
+    <br><br>
   {% endblock %}
