@@ -12,12 +12,12 @@
               <li><a href="{% url 'logout' %}">Wyloguj</a></li>
             </ul>
           </li>
-        </ul>
+          </ul>
           {% else %}
-                  <ul class="nav--actions">
-          <li><a href="{% url 'login' %}" class="btn btn--small btn--without-border">Zaloguj</a></li>
-          <li><a href="{% url 'register' %}" class="btn btn--small btn--highlighted">Załóż konto</a></li>
-        </ul>
+              <ul class="nav--actions">
+              <li><a href="{% url 'login' %}" class="btn btn--small btn--without-border">Zaloguj</a></li>
+              <li><a href="{% url 'register' %}" class="btn btn--small btn--highlighted">Załóż konto</a></li>
+            </ul>
           {% endif %}
 
         <ul>

@@ -23,20 +23,20 @@ class MyCustomResetForm(PasswordResetForm):
 #         fields = ('username', 'first_name', 'last_name', "password1", "password2")
 
 
-def validate_passwords(password1,password2):
-    sp_characters = "[!#$%&'()*+,-./:;<=>?@'[\]^_`{|}\"~]"
-    if password1!=password2:
-        raise ValidationError("Hasła się nie zgadzają.")
-    if len(password1) < 8:
-        raise ValidationError('Hasło musi mieć minimum 8 znaków.')
-    if not any(char.isdigit() for char in password1):
-        raise ValidationError('Hasło musi zawierać minimum jedną cyfrę.')
-    if not any(char.islower() for char in password1):
-        raise ValidationError('Hasło musi zawierać przynajmniej 1 małą literę.')
-    if not any(char.isupper() for char in password1):
-        raise ValidationError('Hasło musi zawierać przynajmniej 1 dużą literę.')
-    if not any(char in sp_characters for char in password1):
-        raise ValidationError('Hasło musi zawierać przynajmniej 1 znak specjalny. '+sp_characters)
+# def validate_passwords(password1,password2):
+#     sp_characters = "[!#$%&'()*+,-./:;<=>?@'[\]^_`{|}\"~]"
+#     if password1!=password2:
+#         raise ValidationError("Hasła się nie zgadzają.")
+#     if len(password1) < 8:
+#         raise ValidationError('Hasło musi mieć minimum 8 znaków.')
+#     if not any(char.isdigit() for char in password1):
+#         raise ValidationError('Hasło musi zawierać minimum jedną cyfrę.')
+#     if not any(char.islower() for char in password1):
+#         raise ValidationError('Hasło musi zawierać przynajmniej 1 małą literę.')
+#     if not any(char.isupper() for char in password1):
+#         raise ValidationError('Hasło musi zawierać przynajmniej 1 dużą literę.')
+#     if not any(char in sp_characters for char in password1):
+#         raise ValidationError('Hasło musi zawierać przynajmniej 1 znak specjalny. '+sp_characters)
 
 
 class EditPassword(forms.Form):

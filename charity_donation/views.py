@@ -1,21 +1,21 @@
-from django.contrib.auth.forms import PasswordResetForm
-from .forms import *
+# from django.contrib.auth.forms import PasswordResetForm
 from datetime import date
-from django.core.paginator import Paginator
+# from django.core.paginator import Paginator
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.forms import forms
-from django.http import HttpResponse
+from django.http import HttpResponse #
+from .forms import *
 from django.shortcuts import render, redirect
-from django.urls import reverse
+from django.urls import reverse #
 from django.views import View
 from .models import Category, Donation, Institution
 from django.db.models import Sum, Count
 import os
 import smtplib
 from email.message import EmailMessage
-from .validators import *
+from .validators import PasswordLenValidator, NumberValidator, LowLetterValidator, UpperLetterValidator, SpecialCharacterValidator
 
 
 class LandingPage(View):
@@ -54,27 +54,22 @@ class LandingPage(View):
 
         msg = EmailMessage()
         msg['Subject'] = 'Wiadomość kontaktowa'
+        # msg['From'] = f'{name} {surname} <n_007@wp.pl>'
         msg['From'] = f'{name} {surname} <n_007@wp.pl>'
         msg['To'] = mail_list
         msg.set_content(f'{message}')
 
-        login4project = os.environ.get('EMAIL_LOGIN_4PROJECT')
-        password4project = os.environ.get('EMAIL_PASS_4PROJECT')
+        # login4project = os.environ.get('EMAIL_LOGIN_4PROJECT')
+        # password4project = os.environ.get('EMAIL_PASS_4PROJECT')
 
         server = smtplib.SMTP_SSL('smtp.wp.pl', 465)
-        # server.ehlo()
+        server.ehlo()
         server.login('n_007@wp.pl', 'tobedziehaslo')
         # server.login(login4project, password4project)
-        server.set_debuglevel(0)
+        server.set_debuglevel(1)
         server.send_message(msg)
         server.quit()
-
         return redirect('index')
-
-
-
-
-
 
 
 class AddDonation(View):
@@ -167,8 +162,6 @@ class UserDonations(LoginRequiredMixin, View):
                 return render(request, 'user-donations.html', {"donated_by_me": donated_by_me})
 
 
-
-
 class EditUser(LoginRequiredMixin, View):
     def get(self, request):
         form2 = EditPassword()
@@ -250,8 +243,6 @@ class Register(View):
         email = request.POST['email']
         password1 = request.POST['password1']
         password2 = request.POST['password2']
-
-        # value = password1
 
         # form = CustomForm(request.POST)
         # if form.is_valid():

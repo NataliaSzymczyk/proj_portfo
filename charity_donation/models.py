@@ -37,7 +37,4 @@ class Donation(models.Model):
     user = models.ForeignKey(User, null=True, default=None, on_delete=models.CASCADE)
     is_taken = models.BooleanField(default=False)
     click_date = models.DateField(null=True) # czy date
-    # def __str__(self):
-    #     return self.name
-
 

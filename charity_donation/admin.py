@@ -1,5 +1,7 @@
 from django.contrib import admin
 from charity_donation.models import Category, Institution, Donation
+
+
 admin.site.site_header = "Panel administracyjny"
 
 
