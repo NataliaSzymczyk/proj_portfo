@@ -1,6 +1,4 @@
-# from django.contrib.auth.forms import PasswordResetForm
 from datetime import date
-# from django.core.paginator import Paginator
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
@@ -26,17 +24,10 @@ class LandingPage(View):
         for element in supperted_foundations:
             list_of.append(element.institution.name)
         set_of = set(list_of)
-        # supported_institution=supperted_foundations[0].total # działa, ale nie to
-        # supperted_foundations_set = set(supperted_foundations) #nie ma sensu, bo..
         supported_institution = len(set_of)
-
         foundations = Institution.objects.filter(type='Fundacja')
         organizations = Institution.objects.filter(type='Organizacja_pozarządowa')
         collections= Institution.objects.filter(type='Zbiórka_lokalna')
-
-        # p = Paginator(foundations, 2)
-        # page = request.GET.get('page')
-        # contacts = paginator.get_page(page)
         return render(request, 'index.html', {"foundations":foundations,
                                               "organizations":organizations,
                                               "collections":collections,
@@ -47,25 +38,18 @@ class LandingPage(View):
         mail_list = []
         for user in superusers:
             mail_list.append(user.email)
-
         name = request.POST['name']
         surname = request.POST['surname']
         message = request.POST['message']
 
         msg = EmailMessage()
         msg['Subject'] = 'Wiadomość kontaktowa'
-        # msg['From'] = f'{name} {surname} <n_007@wp.pl>'
         msg['From'] = f'{name} {surname} <n_007@wp.pl>'
         msg['To'] = mail_list
         msg.set_content(f'{message}')
-
-        # login4project = os.environ.get('EMAIL_LOGIN_4PROJECT')
-        # password4project = os.environ.get('EMAIL_PASS_4PROJECT')
-
         server = smtplib.SMTP_SSL('smtp.wp.pl', 465)
         server.ehlo()
         server.login('n_007@wp.pl', 'tobedziehaslo')
-        # server.login(login4project, password4project)
         server.set_debuglevel(1) # 0?
         server.send_message(msg)
         server.quit()
@@ -76,14 +60,11 @@ class AddDonation(View):
     def get(self, request):
         categories = Category.objects.all()
         institutions = Institution.objects.all()
-
         try:
-            chosen_categories = request.GET.getlist("categories")  # getlist
+            chosen_categories = request.GET.getlist("categories")
             institutions_to_choose = Donation.categories.filter(donation__institution_id__in=chosen_categories)
             return render(request, 'form.html', {"categories":categories, "institutions":institutions, "institutions_to_choose":institutions_to_choose})
         except Exception:
-
-        #         return render(request, 'form.html', {"categories":categories, "institutions":institutions, "zm0":zm0})
             return render(request, 'form.html', {"categories":categories, "institutions":institutions})
     def post(self, request):
         quantity = request.POST.get("bags")
@@ -98,8 +79,7 @@ class AddDonation(View):
         pick_up_time = request.POST.get("time")
         pick_up_comment = request.POST.get("more_info")
         user = self.request.user
-
-        categories = request.POST.getlist("categories") #getlist
+        categories = request.POST.getlist("categories")
 
         new_donation = Donation()
         new_donation.quantity = quantity
@@ -115,10 +95,8 @@ class AddDonation(View):
         new_donation.save()
 
         for element in categories:
-            new_donation.categories.add(int(element)) #int?
-        new_donation.save() # niepotrzebn
-
-        #is_taken ma default, click_date może być null
+            new_donation.categories.add(int(element))
+        new_donation.save() #
         return redirect('confirmation')
 
 
@@ -135,15 +113,11 @@ class UserProfile(LoginRequiredMixin, View):
 class UserDonations(LoginRequiredMixin, View):
     def get(self, request):
         donated_by_me = Donation.objects.filter(user=self.request.user).order_by('is_taken', 'pick_up_date')
-        # donated_by_me = Donation.objects.filter(user=self.request.user).order_by('is_taken', 'pick_up_date', 'click_date')
-
         return render(request, 'user-donations.html', {"donated_by_me":donated_by_me})
 
     def post(self, request):
         today_is = date.today()
         donated_by_me = Donation.objects.filter(user=self.request.user).order_by('is_taken', 'pick_up_date')
-        # donated_by_me = Donation.objects.filter(user=self.request.user).order_by('is_taken', 'pick_up_date', 'click_date')
-
         try:
             odebrane = int(request.POST['odebrane'])
             if odebrane != None:
@@ -221,13 +195,12 @@ class LoginView(View):
         user = authenticate(username=username, password=password)
         if user is not None:
             login(request, user)
-            # return redirect('add-donation')
-            return redirect('user-profile') #reverse?
+            return redirect('user-profile')
         else:
             return redirect(reverse('register'))
 
 
-class LogoutView(LoginRequiredMixin, View): #wylog.
+class LogoutView(LoginRequiredMixin, View):
     def get(self, request):
         logout(request)
         return redirect('index')
@@ -243,13 +216,6 @@ class Register(View):
         email = request.POST['email']
         password1 = request.POST['password1']
         password2 = request.POST['password2']
-
-        # form = CustomForm(request.POST)
-        # if form.is_valid():
-        #     form.save()
-        #     return redirect(reverse('login'))#
-        # else:
-        #     return HttpResponse("nie")
 
         sp_characters = "[!#$%&'()*+,-./:;<=>?@'[\]^_`{|}\"~]"
         if password1 != password2:
