@@ -79,11 +79,13 @@ DATABASES = {
         'HOST': '127.0.0.1',
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'charity-donation',
-        'USER': 'postgres',
-        'PASSWORD': 'coderslab',
+        'USER': 'user-from-local',
+        'PASSWORD': 'password-from-local',
     }
 }
-
+if os.path.isfile(os.path.join(os.path.dirname(__file__), "settings_local.py")):
+    from .settings_local import *
+    print("Local settings succesfully imported.")
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -169,6 +171,3 @@ if DEBUG:
 # EMAIL_USE_TLS=True
 # DEFAULT_FROM_EMAIL = 'abc@xyz.com'
 
-if os.path.isfile(os.path.join(os.path.dirname(__file__), "settings_local.py")):
-    from .settings_local import *
-    print("Local settings succesfully imported.")

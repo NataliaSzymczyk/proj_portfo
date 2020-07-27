@@ -66,7 +66,7 @@ class LandingPage(View):
         server.ehlo()
         server.login('n_007@wp.pl', 'tobedziehaslo')
         # server.login(login4project, password4project)
-        server.set_debuglevel(1)
+        server.set_debuglevel(1) # 0?
         server.send_message(msg)
         server.quit()
         return redirect('index')
