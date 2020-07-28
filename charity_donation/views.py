@@ -41,19 +41,20 @@ class LandingPage(View):
         name = request.POST['name']
         surname = request.POST['surname']
         message = request.POST['message']
-
-        msg = EmailMessage()
-        msg['Subject'] = 'Wiadomość kontaktowa'
-        msg['From'] = f'{name} {surname} <n_007@wp.pl>'
-        msg['To'] = mail_list
-        msg.set_content(f'{message}')
-        server = smtplib.SMTP_SSL('smtp.wp.pl', 465)
-        server.ehlo()
-        server.login('n_007@wp.pl', 'tobedziehaslo')
-        server.set_debuglevel(1) # 0?
-        server.send_message(msg)
-        server.quit()
-        return redirect('index')
+        try:
+            msg = EmailMessage()
+            msg['Subject'] = 'Wiadomość kontaktowa'
+            msg['From'] = f'{name} {surname} <email.potrzebny@interiowy.pl>'
+            msg['To'] = mail_list
+            msg.set_content(f'{message}')
+            server = smtplib.SMTP_SSL('poczta.interia.pl', 465)
+            server.ehlo()
+            server.login('email.potrzebny@interiowy.pl', 'haslo1')
+            server.send_message(msg)
+            server.quit()
+            return redirect('index')
+        except Exception:
+            return render(request, 'try-again-later.html')
 
 
 class AddDonation(View):
