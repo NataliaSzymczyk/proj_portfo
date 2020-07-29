@@ -50,6 +50,7 @@ class LandingPage(View):
             server = smtplib.SMTP_SSL('poczta.interia.pl', 465)
             server.ehlo()
             server.login('email.potrzebny@interiowy.pl', 'haslo1')
+            # w przypadku wyboru tej metody wysyłki - trzeba uzupełnić odpowiednie dane
             server.send_message(msg)
             server.quit()
             return redirect('index')
