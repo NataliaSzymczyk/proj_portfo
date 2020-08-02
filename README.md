@@ -1,4 +1,4 @@
-# proj_portfo
+# Project Portfolio
 
 A project where user can donate items to the organization of his/her choice. 
 
