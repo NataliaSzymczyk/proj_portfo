@@ -56,9 +56,7 @@ document.addEventListener("DOMContentLoaded", function() {
       });
     }
 
-    /**
-     * TODO: callback to page change event
-     */
+
     changePage(e) {
       e.preventDefault();
       const page = e.target.dataset.page;
@@ -221,7 +219,6 @@ document.addEventListener("DOMContentLoaded", function() {
     updateForm() {
       this.$step.innerText = this.currentStep;
 
-      // TODO: Validation
 
       this.slides.forEach(slide => {
         slide.classList.remove("active");
@@ -234,14 +231,10 @@ document.addEventListener("DOMContentLoaded", function() {
       this.$stepInstructions[0].parentElement.parentElement.hidden = this.currentStep >= 6;
       this.$step.parentElement.hidden = this.currentStep >= 6;
 
-      // TODO: get data from inputs and show them in summary
 
-
-    // let przejdzDalej = document.getElementById('idz-dalej');
     let checkboxes = document.querySelectorAll(".moje-pole");
     let organizations = document.querySelectorAll('.organization');
     let tablica = [];
-
 
   if (this.currentStep == 3) {
 
@@ -252,11 +245,13 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     for(let j=0; j<organizations.length; j++){
-      let a = organizations[j].dataset.id.replace(/(\r\n|\n|\r)/gm,",").split(",")
+      let a = organizations[j].dataset.id.replace(/(\r\n|\n|\r)/gm,",").split(",");
       if (a[0] == "") {
         a.shift()
       }
-
+      for (let p=0; p<a.length; p++) {
+        a[p] = a[p].trim();
+      }
         if(checkArrays(tablica, a)){
         console.log('znajdują się');
         organizations[j].parentElement.parentElement.style.display = "block";
@@ -269,7 +264,6 @@ document.addEventListener("DOMContentLoaded", function() {
           for (let k = 0; k < array1.length; k++) {
            if (array2.includes(array1[k])) {
           } else {
-            console.log('wypisz false');
            return false;
           }
         }
@@ -301,7 +295,6 @@ document.addEventListener("DOMContentLoaded", function() {
     for (let i = 0; i < organizations.length; i++) {
       if (organizations[i].checked) {
        let checked_organization =  organizations[i].dataset.name;
-             console.log('wartosc nowsze',checked_organization);
               $("#donation-organization").text('Dla: ' + checked_organization);
       }
     }
@@ -311,7 +304,6 @@ document.addEventListener("DOMContentLoaded", function() {
     /**
      * Submit form
      *
-     * TODO: validation, send data to server
      */
     submit(e) {
       // e.preventDefault();

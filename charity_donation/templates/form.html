@@ -101,7 +101,7 @@
                 <span class="checkbox radio"></span>
                 <span class="description">{% for element in institutions_to_choose %}{{ element.id }}
                 {% endfor %}
-                  <div class="title">{{ el.name }},{{ el.categories_set.category_id }}-{{ el.categories.id }}:<br>
+                  <div class="title">{{ el.name }}:<br>
                   {% for elem in el.categories.all %}
              {{ elem.name }}({{ elem.id }}){% if not forloop.last %}, {% endif %}
             {% endfor %}</div>
