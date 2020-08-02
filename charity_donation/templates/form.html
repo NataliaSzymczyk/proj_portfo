@@ -103,7 +103,7 @@
                 {% endfor %}
                   <div class="title">{{ el.name }}:<br>
                   {% for elem in el.categories.all %}
-             {{ elem.name }}({{ elem.id }}){% if not forloop.last %}, {% endif %}
+             {{ elem.name }}{% if not forloop.last %}, {% endif %}
             {% endfor %}</div>
                   <div class="subtitle">
                     {{ el.description }}
