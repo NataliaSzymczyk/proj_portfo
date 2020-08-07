@@ -154,20 +154,3 @@ LOGIN_URL = '/login'
 if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-# EMAIL_USE_TLS = True
-# EMAIL_HOST = 'smtp.wp.pl'
-# EMAIL_PORT = 465
-# EMAIL_HOST_USER = 'n_007@wp.pl'
-# EMAIL_HOST_PASSWORD = 'tobedziehaslo'
-# DEFAULT_FROM_EMAIL = 'n_007@wp.pl'
-
-
-# # Email configurations
-# EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST='smtp.xyz.com' # Set your email host
-# EMAIL_PORT=587
-# EMAIL_HOST_USER='abc@xyz.com'
-# EMAIL_HOST_PASSWORD='******' #Your password
-# EMAIL_USE_TLS=True
-# DEFAULT_FROM_EMAIL = 'abc@xyz.com'
-
