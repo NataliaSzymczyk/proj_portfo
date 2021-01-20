@@ -10,13 +10,13 @@ _Python 3.6, Django 3.0.7, psycopg2-binary 2.8.5_
 
 **Correct configuration of the file 'settings_local.py' is essential for proper use!**
 
-<img src="pic3.jpg" height="250">
+<img src="pic3.jpg" height="370">
 
 ---
 
-<img src="pic2.jpg" height="250">
+<img src="pic2.jpg" height="370">
 
 ---
-<img src="pic1.jpg" height="250">
+<img src="pic1.jpg" height="370">
 
 ---
