@@ -3,10 +3,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.forms import forms
-from django.http import HttpResponse #
+from django.http import HttpResponse
 from .forms import *
 from django.shortcuts import render, redirect
-from django.urls import reverse #
+from django.urls import reverse
 from django.views import View
 from .models import Category, Donation, Institution
 from django.db.models import Sum, Count
@@ -27,7 +27,7 @@ class LandingPage(View):
         supported_institution = len(set_of)
         foundations = Institution.objects.filter(type='Fundacja')
         organizations = Institution.objects.filter(type='Organizacja_pozarządowa')
-        collections= Institution.objects.filter(type='Zbiórka_lokalna')
+        collections = Institution.objects.filter(type='Zbiórka_lokalna')
         return render(request, 'index.html', {"foundations":foundations,
                                               "organizations":organizations,
                                               "collections":collections,
@@ -132,7 +132,7 @@ class UserDonations(LoginRequiredMixin, View):
             nieodebrane = int(request.POST['nieodebrane'])
             if nieodebrane != None:
                 x = Donation.objects.get(id=nieodebrane)
-                x.is_taken=True
+                x.is_taken = True
                 x.click_date = today_is
                 x.save()
                 return render(request, 'user-donations.html', {"donated_by_me": donated_by_me})
@@ -216,29 +216,30 @@ class Register(View):
         name = request.POST['first_name']
         surname = request.POST['last_name']
         email = request.POST['email']
-        password1 = request.POST['password1']
+        password = request.POST['password1']
         password2 = request.POST['password2']
 
         sp_characters = "[!#$%&'()*+,-./:;<=>?@'[\]^_`{|}\"~]"
-        if password1 != password2:
+        if password != password2:
             msg = "Hasła się nie zgadzają."
             return render(request, 'register.html', {"msg":msg})
-        elif len(password1) < 8:
+        elif len(password) < 8:
             msg = 'Hasło musi mieć minimum 8 znaków.'
             return render(request, 'register.html', {"msg":msg})
-        elif not any(char.isdigit() for char in password1):
+        elif not any(char.isdigit() for char in password):
             msg = 'Hasło musi zawierać minimum jedną cyfrę.'
             return render(request, 'register.html', {"msg":msg})
-        elif not any(char.islower() for char in password1):
+        elif not any(char.islower() for char in password):
             msg = 'Hasło musi zawierać przynajmniej 1 małą literę.'
             return render(request, 'register.html', {"msg":msg})
-        elif not any(char.isupper() for char in password1):
+        elif not any(char.isupper() for char in password):
             msg = 'Hasło musi zawierać przynajmniej 1 dużą literę.'
             return render(request, 'register.html', {"msg":msg})
-        elif not any(char in sp_characters for char in password1):
+        elif not any(char in sp_characters for char in password):
             msg = 'Hasło musi zawierać przynajmniej 1 znak specjalny, czyli jeden z tych: ' + sp_characters
             return render(request, 'register.html', {"msg":msg})
         else:
-            User.objects.create_user(username=email, email=email, password=password1,
+            User.objects.create_user(username=email, email=email, password=password,
                                                 first_name=name, last_name=surname)
             return redirect('login')
+
