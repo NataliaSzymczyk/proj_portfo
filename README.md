@@ -10,6 +10,8 @@ _Python 3.6, Django 3.0.7, psycopg2-binary 2.8.5_
 
 **Correct configuration of the file 'settings_local.py' is essential for proper use!**
 
+
+
 ###### Screenshots
 ---
 <img src="pic3.jpg" height="410">
