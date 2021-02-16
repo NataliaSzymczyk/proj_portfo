@@ -1,5 +1,5 @@
 from django.core.exceptions import ValidationError
-from .models import *
+from .models import Category, Institution, Donation
 from .views import *
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordResetForm, UserCreationForm

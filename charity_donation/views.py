@@ -1,18 +1,19 @@
+import os
+import smtplib
 from datetime import date
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.forms import forms
 from django.http import HttpResponse
-from .forms import *
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
-from .models import Category, Donation, Institution
 from django.db.models import Sum, Count
-import os
-import smtplib
 from email.message import EmailMessage
+
+from .forms import EditPassword, MyCustomResetForm, validate_email
+from .models import Category, Donation, Institution
 from .validators import PasswordLenValidator, NumberValidator, LowLetterValidator, UpperLetterValidator, SpecialCharacterValidator
 
 
@@ -32,7 +33,8 @@ class LandingPage(View):
                                               "organizations":organizations,
                                               "collections":collections,
                                               "all_donations":all_donations,
-                                              "supported_institution":supported_institution,})
+                                              "supported_institution":supported_institution})
+
     def post(self, request):
         superusers = User.objects.filter(is_superuser=True)
         mail_list = []
@@ -68,6 +70,7 @@ class AddDonation(View):
             return render(request, 'form.html', {"categories":categories, "institutions":institutions, "institutions_to_choose":institutions_to_choose})
         except Exception:
             return render(request, 'form.html', {"categories":categories, "institutions":institutions})
+
     def post(self, request):
         quantity = request.POST.get("bags")
         chosen_organization = request.POST.get("organization")
@@ -142,6 +145,7 @@ class EditUser(LoginRequiredMixin, View):
     def get(self, request):
         form2 = EditPassword()
         return render(request, 'user-edit.html', {"form2":form2})
+
     def post(self, request):
         current_user = self.request.user
         current_user_id = User.objects.get(id=current_user.id)
@@ -169,6 +173,7 @@ class UserPassword(LoginRequiredMixin, View):
     def get(self, request):
         form = EditPassword()
         return render(request, 'user-edit-pass.html', {"form":form})
+
     def post(self, request):
         current_user = self.request.user
         current_user_id = User.objects.get(id=current_user.id)
@@ -191,6 +196,7 @@ class UserPassword(LoginRequiredMixin, View):
 class LoginView(View):
     def get(self, request):
         return render(request, 'login.html')
+
     def post(self, request):
         username = request.POST['email']
         password = request.POST['password']
